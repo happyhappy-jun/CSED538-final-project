@@ -7,24 +7,25 @@ from torch.utils.data import DataLoader
 
 from model import *
 from dataloader import LoadDataset
-
+import timm
 
 
 data_cfgs = {"name": "DL20", "num_classes": 20, "dir":"./data/DL20"}
 train_cfgs = {"batch_size": 32, "lr": 0.0002, "total_epoch":20}
 
 ### load small version of ResNet
-model = Small_ResNet(BasicBlock, [3, 3, 3], num_classes=data_cfgs['num_classes']).to('cuda')
+# model = Small_ResNet(BasicBlock, [3, 3, 3], num_classes=data_cfgs['num_classes']).to('cuda')
+model = timm.create_model('tresnet_xl', pretrained=True, num_classes=data_cfgs["num_classes"])
 
 ### load train/valid/test dataset
 train_dataset = LoadDataset(data_cfgs["dir"], mode="train", random_flip=True)
 valid_dataset = LoadDataset(data_cfgs["dir"], mode="valid", random_flip=False)
-test_dataset = LoadDataset(data_cfgs["dir"], mode="test", random_flip=False)
+#test_dataset = LoadDataset(data_cfgs["dir"], mode="test", random_flip=False)
 
 ### warp dataset using dataloader
 train_dataloader = DataLoader(train_dataset, batch_size=train_cfgs["batch_size"], shuffle=True, pin_memory=True, drop_last=True)
 valid_dataloader = DataLoader(valid_dataset, batch_size=train_cfgs["batch_size"], shuffle=False, pin_memory=True, drop_last=False)
-test_dataloader = DataLoader(test_dataset, batch_size=train_cfgs["batch_size"], shuffle=False, pin_memory=True, drop_last=False)
+#test_dataloader = DataLoader(test_dataset, batch_size=train_cfgs["batch_size"], shuffle=False, pin_memory=True, drop_last=False)
 
 ### define Adam optimizer: one of the popular optimizers in Deep Learning community
 optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), train_cfgs["lr"], eps=1e-6)
