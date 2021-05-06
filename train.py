@@ -1,7 +1,7 @@
 import timm
 import torch
 from torch.utils.data import DataLoader
-
+from efficientnet_pytorch import EfficientNet
 from dataloader import LoadDataset
 from model import *
 
@@ -12,7 +12,9 @@ train_cfgs = {"batch_size": 32, "lr": 0.0002, "total_epoch": 20, "model_name": "
 
 ### load small version of ResNet
 # model = Small_ResNet(BasicBlock, [3, 3, 3], num_classes=data_cfgs['num_classes']).to('cuda')
-model = timm.create_model('tresnet_xl', pretrained=True, num_classes=data_cfgs["num_classes"])
+
+model = EfficientNet.from_pretrained('efficientnet-b7',  num_classes=20)
+# model = timm.create_model('tresnet_xl', pretrained=True, num_classes=data_cfgs["num_classes"])
 if torch.cuda.is_available():
     model.cuda()
 
