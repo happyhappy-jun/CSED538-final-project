@@ -31,7 +31,7 @@ valid_dataloader = DataLoader(valid_dataset, batch_size=train_cfgs["batch_size"]
 # test_dataloader = DataLoader(test_dataset, batch_size=train_cfgs["batch_size"], shuffle=False, pin_memory=True, drop_last=False)
 
 ### define Adam optimizer: one of the popular optimizers in Deep Learning community
-optimizer = torch.optim.SGD(momentum=0.9, nesterov=True, lr=train_cfgs["lr"])
+optimizer = torch.optim.SGD(model.parameters(), momentum=0.9, nesterov=True, lr=train_cfgs["lr"])
 
 ### define cross-entropy loss for classification
 criterion = nn.CrossEntropyLoss()
