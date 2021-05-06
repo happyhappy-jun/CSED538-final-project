@@ -14,8 +14,8 @@ class LoadDataset(Dataset):
         self.data_path = data_path
         self.mode = mode
         self.random_flip = random_flip
-        self.norm_mean = [0.5,0.5,0.5]
-        self.norm_std = [0.5,0.5,0.5]
+        self.norm_mean =  (0.485, 0.456, 0.406)
+        self.norm_std = (0.229, 0.224, 0.225)
 
         self.transforms = []
         if random_flip:
