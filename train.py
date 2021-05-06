@@ -1,14 +1,14 @@
-import timm
 import torch
-from torch.utils.data import DataLoader
 from efficientnet_pytorch import EfficientNet
+from torch.utils.data import DataLoader
+
 from dataloader import LoadDataset
 from model import *
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 data_cfgs = {"name": "DL20", "num_classes": 20, "dir": "DL20"}
-train_cfgs = {"batch_size": 32, "lr": 0.0002, "total_epoch": 20, "model_name": "TRESNET_XL_PRETRAINED"}
+train_cfgs = {"batch_size": 256, "lr": 0.0001, "total_epoch": 50, "model_name": "Efficient-B7"}
 
 ### load small version of ResNet
 # model = Small_ResNet(BasicBlock, [3, 3, 3], num_classes=data_cfgs['num_classes']).to('cuda')
@@ -31,7 +31,7 @@ valid_dataloader = DataLoader(valid_dataset, batch_size=train_cfgs["batch_size"]
 # test_dataloader = DataLoader(test_dataset, batch_size=train_cfgs["batch_size"], shuffle=False, pin_memory=True, drop_last=False)
 
 ### define Adam optimizer: one of the popular optimizers in Deep Learning community
-optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), train_cfgs["lr"], eps=1e-6)
+optimizer = torch.optim.SGD(momentum=0.9, nesterov=True, lr=train_cfgs["lr"])
 
 ### define cross-entropy loss for classification
 criterion = nn.CrossEntropyLoss()
