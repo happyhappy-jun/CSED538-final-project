@@ -8,7 +8,7 @@ from model import *
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 data_cfgs = {"name": "DL20", "num_classes": 20, "dir": "DL20"}
-train_cfgs = {"batch_size": 256, "lr": 0.0001, "total_epoch": 50, "model_name": "Efficient-B7"}
+train_cfgs = {"batch_size": 256, "lr": 0.001, "total_epoch": 50, "model_name": "Efficient-B7"}
 
 ### load small version of ResNet
 # model = Small_ResNet(BasicBlock, [3, 3, 3], num_classes=data_cfgs['num_classes']).to('cuda')
@@ -32,6 +32,9 @@ valid_dataloader = DataLoader(valid_dataset, batch_size=train_cfgs["batch_size"]
 
 ### define Adam optimizer: one of the popular optimizers in Deep Learning community
 optimizer = torch.optim.SGD(model.parameters(), momentum=0.9, nesterov=True, lr=train_cfgs["lr"])
+
+## LR Scheduler
+scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, cooldown=3)
 
 ### define cross-entropy loss for classification
 criterion = nn.CrossEntropyLoss()
@@ -72,10 +75,14 @@ while epoch <= train_cfgs["total_epoch"]:
             for images, labels in iter(valid_dataloader):
                 images, labels = images.to(device), labels.to(device)
                 outputs = model(images)
+                val_loss = criterion(outputs, labels)
                 _, predicted = torch.max(outputs.data, 1)
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
         print(f'\nEpoch {epoch} Accuracy of the network on the {len(valid_dataset)} valid images: \
               {100 * correct / total}')
+    # update learning ratew
+    scheduler.step(val_loss)
+
 
 torch.save(model.state_dict(), train_cfgs["model_name"]+".h5")
