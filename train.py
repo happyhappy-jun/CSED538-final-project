@@ -8,7 +8,7 @@ from model import *
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 data_cfgs = {"name": "DL20", "num_classes": 20, "dir": "DL20"}
-train_cfgs = {"batch_size": 256, "lr": 0.001, "min_lr": 0.00005, "total_epoch": 50, "model_name": "Efficient-B7"}
+train_cfgs = {"batch_size": 256, "lr": 0.001, "min_lr": 0.0001, "total_epoch": 100, "model_name": "Efficient-B7"}
 
 ### load small version of ResNet
 # model = Small_ResNet(BasicBlock, [3, 3, 3], num_classes=data_cfgs['num_classes']).to('cuda')
