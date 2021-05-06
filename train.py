@@ -75,14 +75,13 @@ while epoch <= train_cfgs["total_epoch"]:
             for images, labels in iter(valid_dataloader):
                 images, labels = images.to(device), labels.to(device)
                 outputs = model(images)
-                val_loss = criterion(outputs, labels)
                 _, predicted = torch.max(outputs.data, 1)
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
         print(f'\nEpoch {epoch} Accuracy of the network on the {len(valid_dataset)} valid images: \
               {100 * correct / total}')
     # update learning ratew
-    scheduler.step(val_loss)
+    scheduler.step()
 
 
 torch.save(model.state_dict(), train_cfgs["model_name"]+".h5")
