@@ -6,7 +6,7 @@ import torchvision.transforms as transforms
 from torch.utils.data import Dataset
 from torchvision.datasets import ImageFolder
 
-
+from PIL.Image import BICUBIC
 
 class LoadDataset(Dataset):
     def __init__(self, data_path, mode, random_flip=False):
@@ -19,11 +19,16 @@ class LoadDataset(Dataset):
 
         self.transforms = []
         if random_flip:
-            self.transforms += [transforms.RandomHorizontalFlip()]
-        self.transforms += [transforms.ToTensor(),
-                            transforms.Normalize(self.norm_mean, self.norm_std)]
+            self.transforms = [transforms.Resize(255, BICUBIC),
+                               transforms.RandomCrop(224),
+                               transforms.RandomHorizontalFlip(),
+                               transforms.ToTensor(),
+                               transforms.Normalize(self.norm_mean, self.norm_std)
+                               ]
+        else:
+            self.transforms = [transforms.ToTensor(),
+                               transforms.Normalize(self.norm_mean, self.norm_std)]
         self.transforms = transforms.Compose(self.transforms)
-
         self.load_dataset()
 
 

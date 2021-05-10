@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader
 from dataloader import LoadDataset
 from model import *
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 data_cfgs = {"name": "DL20", "num_classes": 20, "dir": "DL20"}
 train_cfgs = {"batch_size": 256, "lr": 0.001, "min_lr": 0.0001, "total_epoch": 100, "model_name": "Efficient-B7"}
@@ -13,7 +13,7 @@ train_cfgs = {"batch_size": 256, "lr": 0.001, "min_lr": 0.0001, "total_epoch": 1
 ### load small version of ResNet
 # model = Small_ResNet(BasicBlock, [3, 3, 3], num_classes=data_cfgs['num_classes']).to('cuda')
 
-model = EfficientNet.from_pretrained('efficientnet-b7',  num_classes=20)
+model = EfficientNet.from_pretrained('efficientnet-b0',  num_classes=20)
 # model = timm.create_model('tresnet_xl', pretrained=True, num_classes=data_cfgs["num_classes"])
 if torch.cuda.is_available():
     model.cuda()
