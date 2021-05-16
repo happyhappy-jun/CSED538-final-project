@@ -5,6 +5,8 @@ from torch.utils.data import DataLoader
 from dataloader import LoadDataset
 from model import *
 
+SAVE_STATE_DICT = True # if enabled only save parameter, false: save whole model
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 data_cfgs = {"name": "DL20", "num_classes": 20, "dir": "DL20"}
@@ -83,5 +85,7 @@ while epoch <= train_cfgs["total_epoch"]:
     # update learning ratew
     scheduler.step()
 
-
-torch.save(model.state_dict(), train_cfgs["model_name"]+".h5")
+if SAVE_STATE_DICT:
+    torch.save(model.state_dict(), train_cfgs["model_name"]+".h5")
+else:
+    torch.save(model, train_cfgs["model_name"]+".h5")

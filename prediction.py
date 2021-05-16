@@ -3,7 +3,7 @@ import os
 import pandas as pd
 import torch
 from torch.utils.data import DataLoader
-
+from efficientnet_pytorch import EfficientNet
 from dataloader import LoadDataset
 
 data_cfgs = {"name": "DL20", "num_classes": 20, "dir": "DL20"}
@@ -13,8 +13,18 @@ test_dataset = LoadDataset(data_cfgs["dir"], mode="test", random_flip=False)
 test_dataloader = DataLoader(test_dataset, batch_size=train_cfgs["batch_size"], shuffle=False, pin_memory=True,
                              drop_last=False)
 # Load trained model
-model = torch.load(train_cfgs["model_name"] + ".h5")
+
+# You need to choose correct model type to use load_stat_dict feature
+# this boolean value should match with SAVE_STATE_DICT in train.py
+LOAD_FROM_STATE_DICT = True
+if LOAD_FROM_STATE_DICT:
+    model = EfficientNet.from_pretrained('efficientnet-b0', num_classes=20)
+    model.load_state_dict(torch.load(train_cfgs["model_name"] + ".h5"))
+else:
+    model = torch.load(torch.load(train_cfgs["model_name"] + ".h5"))
+
 model.eval()
+
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 predictions = []
