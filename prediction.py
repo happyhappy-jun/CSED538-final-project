@@ -9,7 +9,7 @@ from dataloader import LoadDataset
 data_cfgs = {"name": "DL20", "num_classes": 20, "dir": "DL20"}
 train_cfgs = {"batch_size": 32, "lr": 0.0002, "total_epoch": 20, "model_name": "TRESNET_XL_PRETRAINED"}
 
-test_dataset = LoadDataset(data_cfgs["dir"], mode="test", random_flip=False)
+test_dataset = LoadDataset(data_cfgs["dir"], mode="test", is_train=False)
 test_dataloader = DataLoader(test_dataset, batch_size=train_cfgs["batch_size"], shuffle=False, pin_memory=True,
                              drop_last=False)
 # Load trained model

@@ -21,8 +21,8 @@ if torch.cuda.is_available():
     model.cuda()
 
 ### load train/valid/test dataset
-train_dataset = LoadDataset(data_cfgs["dir"], mode="train", random_flip=True)
-valid_dataset = LoadDataset(data_cfgs["dir"], mode="valid", random_flip=False)
+train_dataset = LoadDataset(data_cfgs["dir"], mode="train", is_train=True)
+valid_dataset = LoadDataset(data_cfgs["dir"], mode="valid", is_train=False)
 # test_dataset = LoadDataset(data_cfgs["dir"], mode="test", random_flip=False)
 
 ### warp dataset using dataloader
