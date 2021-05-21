@@ -19,7 +19,7 @@ python3 setup.py build_ext --inplace
 
 ## Pre-trained models
 
-You can download the pre-trained models for 2x and 4x downscaling and super-resolution from here.
+You can download the pre-trained models for 2x and 4x downscaling and super-resolution from [here].
 
 ## Implement
 
@@ -30,3 +30,6 @@ We want to get 4x upsampled image, so we 4x upsample the images **(upsample.py)*
 python3 run.py --scale 4 --img_dir path_to_images --model_dir path_to_pretrained_models
 --output_dir path_to_output
 ```
+
+[//]:
+    [here]: <https://mega.nz/file/XzIm3YhT#jbIOOOGBOiKtv3VAOD782Mz7nK1L_kma-BzR-RhboW4>
