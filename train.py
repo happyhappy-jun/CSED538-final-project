@@ -1,21 +1,22 @@
 import torch
 from efficientnet_pytorch import EfficientNet
 from torch.utils.data import DataLoader
-
+import pandas as pd
 from dataloader import LoadDataset
 from model import *
+from datetime import datetime
 
 SAVE_STATE_DICT = True # if enabled only save parameter, false: save whole model
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+print(torch.cuda.get_device_name(0))
 data_cfgs = {"name": "DL20", "num_classes": 20, "dir": "DL20"}
-train_cfgs = {"batch_size": 256, "lr": 0.001, "min_lr": 0.0001, "total_epoch": 100, "model_name": "Efficient-B7"}
+train_cfgs = {"batch_size": 64, "lr": 0.001, "min_lr": 0.0001, "total_epoch": 100, "model": "efficientnet-b0"}
 
 ### load small version of ResNet
 # model = Small_ResNet(BasicBlock, [3, 3, 3], num_classes=data_cfgs['num_classes']).to('cuda')
 
-model = EfficientNet.from_pretrained('efficientnet-b0',  num_classes=20)
+model = EfficientNet.from_pretrained(train_cfgs["model"],  num_classes=20)
 # model = timm.create_model('tresnet_xl', pretrained=True, num_classes=data_cfgs["num_classes"])
 if torch.cuda.is_available():
     model.cuda()
@@ -41,6 +42,7 @@ scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max = train_
 ### define cross-entropy loss for classification
 criterion = nn.CrossEntropyLoss()
 
+log = pd.DataFrame(columns=['epochs', 'train_loss', 'test_loss', 'test_accuracy'])
 ####################################################################################################
 ### Start training ###
 print("Start Training")
@@ -77,15 +79,20 @@ while epoch <= train_cfgs["total_epoch"]:
             for images, labels in iter(valid_dataloader):
                 images, labels = images.to(device), labels.to(device)
                 outputs = model(images)
+                test_loss = criterion(outputs, labels)
                 _, predicted = torch.max(outputs.data, 1)
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
         print(f'\nEpoch {epoch} Accuracy of the network on the {len(valid_dataset)} valid images: \
               {100 * correct / total}')
+        log.loc[len(log)] = [epoch, loss, test_loss, 100 * correct / total]
     # update learning ratew
     scheduler.step()
 
+now = datetime.now()
+log.to_csv(f'./log_{now:%Y-%m-%d %H:%M}.csv', index=False)
+
 if SAVE_STATE_DICT:
-    torch.save(model.state_dict(), train_cfgs["model_name"]+".h5")
+    torch.save(model.state_dict(), train_cfgs["model"]+".h5")
 else:
-    torch.save(model, train_cfgs["model_name"]+".h5")
+    torch.save(model, train_cfgs["model"]+".h5")
