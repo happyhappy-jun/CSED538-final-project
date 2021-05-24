@@ -2,7 +2,7 @@ import torch
 from efficientnet_pytorch import EfficientNet
 from torch.utils.data import DataLoader
 import pandas as pd
-from dataloader import LoadDataset
+from Augplus import LoadDataset
 from model import *
 from datetime import datetime
 
@@ -11,7 +11,7 @@ SAVE_STATE_DICT = True # if enabled only save parameter, false: save whole model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(torch.cuda.get_device_name(0))
 data_cfgs = {"name": "DL20", "num_classes": 20, "dir": "DL20"}
-train_cfgs = {"batch_size": 64, "lr": 0.001, "min_lr": 0.0001, "total_epoch": 100, "model": "efficientnet-b0"}
+train_cfgs = {"batch_size": 4, "lr": 0.001, "min_lr": 0.0001, "total_epoch": 100, "model": "efficientnet-b0"}
 
 ### load small version of ResNet
 # model = Small_ResNet(BasicBlock, [3, 3, 3], num_classes=data_cfgs['num_classes']).to('cuda')
@@ -22,7 +22,7 @@ if torch.cuda.is_available():
     model.cuda()
 
 ### load train/valid/test dataset
-train_dataset = LoadDataset(data_cfgs["dir"], mode="train", is_train=True)
+train_dataset = LoadDataset(data_cfgs["dir"], mode="valid", is_train=True)
 valid_dataset = LoadDataset(data_cfgs["dir"], mode="valid", is_train=False)
 # test_dataset = LoadDataset(data_cfgs["dir"], mode="test", random_flip=False)
 
