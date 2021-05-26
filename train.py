@@ -2,7 +2,7 @@ import torch
 from efficientnet_pytorch import EfficientNet
 from torch.utils.data import DataLoader
 import pandas as pd
-from dataloader import LoadDataset
+from Augplus import LoadDataset
 from model import *
 from datetime import datetime
 
@@ -22,7 +22,7 @@ if torch.cuda.is_available():
     model.cuda()
 
 ### load train/valid/test dataset
-train_dataset = LoadDataset(data_cfgs["dir"], mode="train", is_train=True)
+train_dataset = LoadDataset(data_cfgs["dir"], mode="valid", is_train=True)
 valid_dataset = LoadDataset(data_cfgs["dir"], mode="valid", is_train=False)
 # test_dataset = LoadDataset(data_cfgs["dir"], mode="test", random_flip=False)
 
