@@ -11,11 +11,11 @@ SAVE_STATE_DICT = True # if enabled only save parameter, false: save whole model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(torch.cuda.get_device_name(0))
 data_cfgs = {"name": "DL20", "num_classes": 20, "dir": "DL20"}
-train_cfgs = {"batch_size": 8, "lr": 0.001, "min_lr": 0.0001, "total_epoch": 20, "model": "efficientnet-B7"}
+train_cfgs = {"batch_size": 64, "lr": 0.001, "min_lr": 0.0001, "total_epoch": 20, "model": "efficientnet-B7"}
 
 ### load small version of ResNet
 # model = Small_ResNet(BasicBlock, [3, 3, 3], num_classes=data_cfgs['num_classes']).to('cuda')
-model = EfficientNet.from_name('efficientnet-b7', num_classes=20)
+model = EfficientNet.from_name('efficientnet-b0', num_classes=20)
 # model = EfficientNet.from_pretrained('efficientnet-b7',  num_classes=20)
 # model = timm.create_model('tresnet_xl', pretrained=True, num_classes=data_cfgs["num_classes"])
 if torch.cuda.is_available():
