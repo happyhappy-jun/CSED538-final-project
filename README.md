@@ -3,6 +3,8 @@
 This is repo for CSED538/AIGS538 Deep learning final project. 
 just do it
 
+## Poster Presentation
+![](Final_Poster_ECAT.png)
 
 ## Training log
 All training log to construcut final model is available in ![wandb](https://wandb.ai/happyhappy/CSED538-final-project)
