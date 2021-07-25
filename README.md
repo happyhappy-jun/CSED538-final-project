@@ -6,6 +6,8 @@ just do it
 ## Poster Presentation
 ![](report/Final_Poster_E_CAT.png)
 
+## Report
+If you are interested in our works, please refer to our [report](report)
 ## Training log
 All training log to construcut final model is available in ![wandb](https://wandb.ai/happyhappy/CSED538-final-project)
 
